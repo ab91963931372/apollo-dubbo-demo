@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="log_path">logs/dubbo/</Property>
+    </Properties>
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c{36}#%L - %m%n"/>
+        </Console>
+        <RollingFile name="DailyRollingFile" fileName="${log_path}/dubbo-logs.log"
+                     filePattern="${log_path}/dubbo-logs-%d{yyyy-MM-dd}.log">
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c{36}#%L - %m%n"/>
+            <TimeBasedTriggeringPolicy/>
+        </RollingFile>
+        <RollingFile name="ErrorRollingFile" fileName="${log_path}/dubbo-error.log"
+                     filePattern="${log_path}/dubbo-error-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c{36}#%L - %m%n"/>
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="DailyRollingFile"/>
+            <AppenderRef ref="ErrorRollingFile"/>
+        </Root>
+        <Logger name="RocketmqRemoting" level="error"/>
+        <Logger name="RocketmqClient" level="error"/>
+        <Logger name="RocketmqCommon" level="error"/>
+    </Loggers>
+</Configuration>
